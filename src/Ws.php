@@ -11,10 +11,26 @@ class Ws{
     static function open(){
         global $argv;
 
-        $port = $argv[2];
-        self::$expire = $argv[3];
-        unset($argv[2]);
-        unset($argv[3]);
+        if($argv[1] == 'stop'){
+            Worker::runAll();
+            return;
+        }
+
+        if(!is_integer($argv[2])){
+            $port = $argv[3];
+            self::$expire = $argv[4];
+            unset($argv[3]);
+            unset($argv[4]);
+        }
+        else{
+            $port = $argv[2];
+            self::$expire = $argv[3];
+            unset($argv[2]);
+            unset($argv[3]);
+        }
+
+
+
 
         // Create a Websocket server
         $ws_worker = new Worker("websocket://0.0.0.0:{$port}");
