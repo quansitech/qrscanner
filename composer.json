@@ -1,0 +1,25 @@
+{
+  "name": "quansitech/qrscanner",
+  "description": "qrcode websocket workerman",
+  "type": "library",
+  "keywords": ["qrcode", "websocket", "workerman"],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "tiderjian",
+      "email": "tider_yatsen@hotmail.com"
+    }
+  ],
+  "require": {
+      "php": ">=7.2.0",
+      "workerman/workerman": "^3.5"
+  },
+  "autoload": {
+    "psr-4": {
+      "Qrscanner\\": "src/"
+    }
+  },
+  "bin": [
+    "qrscanner"
+  ]
+}
