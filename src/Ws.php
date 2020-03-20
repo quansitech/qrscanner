@@ -21,9 +21,15 @@ class Ws{
         $config['method'] = $argv[1];
         unset($argv[1]);
         foreach($argv as $v){
-            if(strpos($v, '--') == 0){
+            if(strpos($v, '--') === 0){
                 $v = ltrim($v, "--");
-                list($key, $value) = explode("=", $v);
+                if(strpos($v, '=') !== false){
+                    list($key, $value) = explode("=", $v);
+                }
+                else{
+                    $key = $v;
+                    $value = null;
+                }
                 $config[$key] = is_null($value) ? true : $value;
             }
         }
@@ -37,7 +43,7 @@ class Ws{
         $config = self::parseConfig();
         $argv[1] = $config['method'];
 
-        if($config['d']){
+        if(isset($config['d']) && $config['d'] === true){
             $argv[2] = '-d';
         }
 
@@ -46,17 +52,24 @@ class Ws{
             return;
         }
 
-        $path = dirname($config['config']);
-        $file = str_replace($path . '/', '', $config['config']);
+        if(isset($config['config'])){
+            $path = dirname($config['config']);
+            $file = str_replace($path . '/', '', $config['config']);
 
-        $dotenv = Dotenv::create($path, $file);
-        $dotenv->load();
+            $dotenv = Dotenv::create($path, $file);
+            $dotenv->load();
 
+            $host = env('host', self::$default['host']);
+            $port = env('port', self::$default['port']);
+            $ssl = env('ssl', self::$default['ssl']);
+            self::$expire = env('expire', self::$expire);
+        }
+        else{
+            $host = self::$default['host'];
+            $port = self::$default['port'];
+            $ssl = self::$default['ssl'];
+        }
         $ws_worker = null;
-        $host = env('host', self::$default['host']);
-        $port = env('port', self::$default['port']);
-        $ssl = env('ssl', self::$default['ssl']);
-        self::$expire = env('expire', self::$expire);
         if($ssl){
             $context = array(
                 'ssl' => array(
