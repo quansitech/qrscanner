@@ -18,8 +18,8 @@ class Ws{
     static protected function parseConfig(){
         global $argv;
 
-        $config['method'] = $argv[1];
-        unset($argv[1]);
+//        $config['method'] = $argv[1];
+//        unset($argv[1]);
         foreach($argv as $v){
             if(strpos($v, '--') === 0){
                 $v = ltrim($v, "--");
@@ -37,10 +37,11 @@ class Ws{
         return $config;
     }
 
-    static function open(){
+    static function open($method){
         global $argv;
 
         $config = self::parseConfig();
+        $config['method'] = $method;
         $argv[1] = $config['method'];
 
         if(isset($config['d']) && $config['d'] === true){
